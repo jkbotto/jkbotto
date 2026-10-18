@@ -1,18 +1,48 @@
 {
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
-      "source": { "source": "github", "repo": "anthropics/skills" }
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
     },
     "claude-hud": {
-      "source": { "source": "github", "repo": "jarrodwatts/claude-hud" }
+      "source": {
+        "source": "github",
+        "repo": "jarrodwatts/claude-hud"
+      }
     },
     "i-have-adhd": {
-      "source": { "source": "github", "repo": "ayghri/i-have-adhd" }
+      "source": {
+        "source": "github",
+        "repo": "ayghri/i-have-adhd"
+      }
+    },
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
+    },
+    "ui-ux-pro-max-skill": {
+      "source": {
+        "source": "github",
+        "repo": "nextlevelbuilder/ui-ux-pro-max-skill"
+      }
+    },
+    "impeccable": {
+      "source": {
+        "source": "github",
+        "repo": "pbakaus/impeccable"
+      }
     }
   },
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true,
     "claude-hud@claude-hud": true,
-    "i-have-adhd@i-have-adhd": true
+    "i-have-adhd@i-have-adhd": true,
+    "superpowers@superpowers-marketplace": true,
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
+    "impeccable@impeccable": true
   }
 }
