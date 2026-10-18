@@ -25,7 +25,8 @@ $feitos = New-Object System.Collections.Generic.List[string]
 $SkillsDir = Join-Path $HOME '.claude\skills'
 $Manter = @(
     'eval-driven-dev', 'humanizer', 'screenshot',
-    'security-best-practices', 'security-threat-model'
+    'security-best-practices', 'security-threat-model',
+    'find-skills'  # origem desconhecida, protegida - ver README.md
 )
 if ($InstalarOpcionais) { $Manter += 'react-best-practices' }
 

@@ -23,7 +23,8 @@ for arg in "$@"; do
 done
 
 SKILLS_DIR="$HOME/.claude/skills"
-MANTER=(eval-driven-dev humanizer screenshot security-best-practices security-threat-model)
+# find-skills fica protegida: origem desconhecida, ver README.md
+MANTER=(eval-driven-dev humanizer screenshot security-best-practices security-threat-model find-skills)
 if [ "$INSTALAR_OPCIONAIS" = true ]; then MANTER+=(react-best-practices); fi
 
 FEITOS=0
@@ -33,7 +34,9 @@ C_CYAN=$'\033[36m'; C_GREEN=$'\033[32m'; C_RED=$'\033[31m'
 C_GRAY=$'\033[90m'; C_YELLOW=$'\033[33m'; C_OFF=$'\033[0m'
 
 passo() { printf '\n%s==> %s%s\n' "$C_CYAN" "$1" "$C_OFF"; }
-ok()    { printf '    %sOK   %s%s\n' "$C_GREEN" "$1" "$C_OFF"; FEITOS=$((FEITOS+1)); }
+# ok conta um item instalado/copiado; status so imprime (nao entra no total)
+status(){ printf '    %sOK   %s%s\n' "$C_GREEN" "$1" "$C_OFF"; }
+ok()    { status "$1"; FEITOS=$((FEITOS+1)); }
 falha() { printf '    %sFALHA %s%s\n' "$C_RED" "$1" "$C_OFF"; FALHAS+=("$1"); }
 nota()  { printf '    %s-    %s%s\n' "$C_GRAY" "$1" "$C_OFF"; }
 
@@ -56,14 +59,14 @@ copy_skill() {
 passo "Verificando pre-requisitos"
 command -v claude >/dev/null 2>&1 || { echo "Claude Code CLI ('claude') nao encontrado no PATH. Abortando." >&2; exit 1; }
 command -v git    >/dev/null 2>&1 || { echo "'git' nao encontrado no PATH. Abortando." >&2; exit 1; }
-ok "claude e git presentes"
+status "claude e git presentes"
 mkdir -p "$SKILLS_DIR"
 
 # ---- limpeza opcional ---------------------------------------------------------
 if [ "$LIMPAR" = true ]; then
   passo "Removendo a versao inchada"
   for p in ecc@ecc document-skills@anthropic-agent-skills claude-api@anthropic-agent-skills; do
-    if claude plugin uninstall "$p" >/dev/null 2>&1; then ok "desinstalado $p"
+    if claude plugin uninstall "$p" >/dev/null 2>&1; then status "desinstalado $p"
     else nota "$p nao estava instalado"; fi
   done
   removidas=0
@@ -72,7 +75,7 @@ if [ "$LIMPAR" = true ]; then
     nome="$(basename "$d")"
     if ! manter_contem "$nome"; then rm -rf "$d" && removidas=$((removidas+1)); fi
   done
-  ok "$removidas skills avulsas removidas de ~/.claude/skills"
+  status "$removidas skills avulsas removidas de ~/.claude/skills"
 fi
 
 # ---- plugins ------------------------------------------------------------------
@@ -127,7 +130,7 @@ limpar_tmp() {
   [ "$TMP_LIMPO" = true ] && return 0
   TMP_LIMPO=true
   passo "Limpando diretorio temporario"
-  if rm -rf "$TMP"; then ok "temporario removido"; else nota "remova manualmente: $TMP"; fi
+  if rm -rf "$TMP"; then status "temporario removido"; else nota "remova manualmente: $TMP"; fi
 }
 # rede de seguranca: se o script morrer no meio, o temporario ainda e removido
 trap 'limpar_tmp' EXIT
@@ -190,7 +193,7 @@ for d in "$SKILLS_DIR"/*/; do
     fi
   fi
 done
-if [ ${#sem_skill[@]} -eq 0 ]; then ok "todas as skills avulsas tem SKILL.md"
+if [ ${#sem_skill[@]} -eq 0 ]; then status "todas as skills avulsas tem SKILL.md"
 else falha "sem SKILL.md: ${sem_skill[*]}"; fi
 
 printf '\n%sSkills avulsas em ~/.claude/skills:%s\n' "$C_CYAN" "$C_OFF"
